@@ -1,0 +1,57 @@
+# Práctica de Servidor DNS Maestro y Esclavo
+
+## Descripción
+
+Esta práctica consiste en configurar un servidor DNS maestro y un servidor DNS esclavo en una red local. El servidor maestro será responsable de las zonas directa e inversa, mientras que el servidor esclavo replicará la información del maestro. La red utilizada es `192.168.57.0/24`.
+
+## Contenido del Repositorio
+
+El repositorio contiene los siguientes archivos:
+
+- **.gitignore**: Ignora el directorio `.vagrant` y los archivos de backup.
+- **Vagrantfile**: Configuración para crear las máquinas virtuales del proyecto.
+- **README.md**: Documentación de la práctica.
+- **LICENSE**: Archivo de licencia con la licencia elegida.
+
+## Equipos
+
+| Equipo FQDN              | IP      |
+|--------------------------|---------|
+| Linux gráfico            | .101    |
+| Debian texto (Esclavo)   | venus.sistema.test  | .102    |
+| Debian texto (Maestro)   | tierra.sistema.test  | .103    |
+| Windows gráfico          | marte.sistema.test  | .104    |
+
+## Configuración del DNS
+
+1. **Escucha del servidor**: Solo se activa para el protocolo IPv4.
+2. **Validación DNSSEC**: Se establece en `yes`.
+3. **Consultas recursivas**: Permitidas solo para la red `127.0.0.0/8` y `192.168.57.0/24` mediante ACL.
+4. **Servidor Maestro**: `tierra.sistema.test` con autoridad sobre la zona directa e inversa.
+5. **Servidor Esclavo**: `venus.sistema.test`, que tiene como maestro a `tierra.sistema.test`.
+6. **Tiempo de caché**: Respuestas negativas de las zonas (directa e inversa) se configuran a 2 horas.
+7. **Reenvío de consultas**: Consultas no autorizadas se reenvían a `208.67.222.222` (OpenDNS).
+8. **Alias configurados**:
+   - `ns1.sistema.test` es un alias de `tierra.sistema.test`.
+   - `ns2.sistema.test` es un alias de `venus.sistema.test`.
+   - `mail.sistema.test` es un alias de `marte.sistema.test`.
+
+## Comprobación
+
+Para verificar la correcta configuración del DNS, se realizarán las siguientes consultas:
+
+- Resolución de registros tipo A.
+- Resolución inversa de direcciones IP.
+- Resolución de alias `ns1.sistema.test` y `ns2.sistema.test`.
+- Consulta de servidores NS de `sistema.test`.
+- Consulta de servidores MX de `sistema.test`.
+- Verificación de la transferencia de zona entre el servidor maestro y el esclavo.
+- Comprobación de que tanto el maestro como el esclavo pueden responder a las mismas preguntas.
+
+## Ejecución
+
+1. Clona el repositorio.
+2. Asegúrate de tener [Vagrant](https://www.vagrantup.com/) y [VirtualBox](https://www.virtualbox.org/) instalados.
+3. Ejecuta el siguiente comando para iniciar las máquinas virtuales:
+   ```bash
+   vagrant up
