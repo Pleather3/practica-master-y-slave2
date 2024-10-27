@@ -1,4 +1,3 @@
-
 zone "sistema.test" {
     type slave;
     file "/etc/bind/db.sistema.test"; // Archivo de zona directa
