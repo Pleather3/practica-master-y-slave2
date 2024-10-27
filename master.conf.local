@@ -1,24 +1,21 @@
-options {
-	directory "/var/cache/bind";
+zone "sistema.test" {
+    type master;
+    file "/etc/bind/db.sistema.test"; // Archivo de zona directa
+};
 
-	// If there is a firewall between you and nameservers you want
-	// to talk to, you may need to fix the firewall to allow multiple
-	// ports to talk.  See http://www.kb.cert.org/vuls/id/800113
+zone "57.168.192.in-addr.arpa" {
+    type master;
+    file "/etc/bind/db.192"; // Archivo de zona inversa
+};
 
-	// If your ISP provided one or more IP addresses for stable 
-	// nameservers, you probably want to use them as forwarders.  
-	// Uncomment the following block, and insert the addresses replacing 
-	// the all-0's placeholder.
+zone "sistema.test" {
+    type slave;
+    file "/etc/bind/db.sistema.test"; // Archivo de zona directa
+    masters { 192.168.57.103; }; // IP del servidor maestro
+};
 
-	// forwarders {
-	// 	0.0.0.0;
-	// };
-
-	//========================================================================
-	// If BIND logs error messages about the root key being expired,
-	// you will need to update your keys.  See https://www.isc.org/bind-keys
-	//========================================================================
-	dnssec-validation auto;
-
-	listen-on-v6 { any; };
+zone "57.168.192.in-addr.arpa" {
+    type slave;
+    file "/etc/bind/db.192"; // Archivo de zona inversa
+    masters { 192.168.57.103; }; // IP del servidor maestro
 };
