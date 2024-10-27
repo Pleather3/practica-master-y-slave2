@@ -1,0 +1,30 @@
+options {
+    directory "/var/cache/bind";
+
+    // Escuchar solo en IPv4
+    listen-on { 0.0.0.0; };
+
+    // Validación DNSSEC habilitada
+    dnssec-validation yes;
+
+    // Listas de control de acceso
+    acl "localnet" {
+        127.0.0.0/8;    // Red local
+        192.168.57.0/24; // Red específica
+    };
+
+    // Permitir consultas recursivas solo a la red local
+    allow-query { localnet; };
+
+    // Configuración de reenvío
+    forwarders {
+        208.67.222.222; // OpenDNS
+    };
+
+    // Habilitar el reenvío
+    forward only;
+
+    // Otras opciones
+    auth-nxdomain no;    // Conformidad con RFC 1912
+    listen-on-v6 { none; }; // Desactivar IPv6
+};
