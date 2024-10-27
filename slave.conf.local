@@ -1,9 +1,12 @@
+
 zone "sistema.test" {
-    type master;
+    type slave;
     file "/etc/bind/db.sistema.test"; // Archivo de zona directa
+    masters { 192.168.57.103; }; // IP del servidor maestro
 };
 
 zone "57.168.192.in-addr.arpa" {
-    type master;
+    type slave;
     file "/etc/bind/db.192"; // Archivo de zona inversa
+    masters { 192.168.57.103; }; // IP del servidor maestro
 };

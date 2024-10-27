@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
       sudo apt-get install -y bind9
       cp -v /vagrant/named /etc/default/named
       sudo systemctl restart named
-      cp -v /vagrant/named.conf.options /etc/bind/named.conf.options
+      cp -v /vagrant/master.conf.options /etc/bind/master.conf.options
       sudo systemctl restart bind9
     SHELL
   end
